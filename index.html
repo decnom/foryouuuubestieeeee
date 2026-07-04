@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday! 🎉</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #0f0c1b;
+            color: #ffffff;
+        }
+
+        .wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            perspective: 1200px;
+        }
+
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            transition: transform 1.2s cubic-bezier(0.7, 0, 0.3, 1), opacity 1s ease;
+            transform-origin: center center;
+            backface-visibility: hidden;
+        }
+
+        #page1 {
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+            z-index: 3;
+            opacity: 1;
+            transform: scale(1) translateZ(0);
+        }
+
+        #page2 {
+            background: linear-gradient(135deg, #65799b 0%, #5e2563 100%);
+            z-index: 2;
+            opacity: 0;
+            transform: scale(0.1) translateZ(-500px);
+            pointer-events: none;
+        }
+
+        #page3 {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            z-index: 1;
+            opacity: 0;
+            transform: scale(0.1) translateZ(-500px);
+            pointer-events: none;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+        }
+
+        p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #ff758c;
+            background: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.25);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        .back-btn {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            margin-top: 20px;
+            padding: 10px 25px;
+            font-size: 0.9rem;
+        }
+
+        /* Completely hides the background video player */
+        #music-player {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hidden audio element streaming from YouTube -->
+    <iframe id="music-player" src="https://youtube.com⭐️VIDEO_ID_HERE⭐️?enablejsapi=1&autoplay=0&controls=0" allow="autoplay"></iframe>
+
+    <div class="wrapper">
+
+        <!-- PAGE 1 -->
+        <div id="page1" class="page">
+            <h1>Hey Bestie! ✨</h1>
+            <p>Today is a very special day. I made something just for you. Are you ready to see it?</p>
+            <!-- Clicking this triggers the zoom AND starts the music -->
+            <button onclick="startExperience()">Click to Open 🎁</button>
+        </div>
+
+        <!-- PAGE 2 -->
+        <div id="page2" class="page">
+            <h1>Happy Birthday! 🎂</h1>
+            <p>You have been my absolute rock, my partner in crime, and the best person in my life. Thank you for always being you. Here's to making infinitely more memories together!</p>
+            <button onclick="navigateTo('#page2', '#page3')">See Our Memories 📸</button>
+            <button class="back-btn" onclick="navigateBack('#page2', '#page1')">Go Back</button>
+        </div>
+
+        <!-- PAGE 3 -->
+        <div id="page3" class="page">
+            <h1>Our Gallery 🌸</h1>
+            <p>[Insert your favourite photo grids or jokes here!]</p>
+            <button class="back-btn" onclick="navigateBack('#page3', '#page2')">Go Back</button>
+        </div>
+
+    </div>
+
+    <script>
+        // Load YouTube IFrame Player API
+        var tag = document.createElement('script');
+        tag.src = "https://youtube.com";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('music-player');
+        }
+
+        // Custom action for the very first click
+        function startExperience() {
+            // 1. Play the music immediately via user interaction
+            if (player && typeof player.playVideo === 'function') {
+                player.playVideo();
+            }
+            
+            // 2. Run the zoom transition to Page 2
+            navigateTo('#page1', '#page2');
+        }
+
+        // Standard Zoom Forward
+        function navigateTo(currentPageId, nextPageId) {
+            const current = document.querySelector(currentPageId);
+            const next = document.querySelector(nextPageId);
+
+            current.style.transform = "scale(5) translateZ(300px)";
+            current.style.opacity = "0";
+            current.style.pointerEvents = "none";
+
+            next.style.opacity = "1";
+            next.style.transform = "scale(1) translateZ(0)";
+            next.style.pointerEvents = "auto";
+        }
+
+        // Standard Zoom Backward
+        function navigateBack(currentPageId, prevPageId) {
+            const current = document.querySelector(currentPageId);
+            const prev = document.querySelector(prevPageId);
+
+            current.style.transform = "scale(0.1) translateZ(-500px)";
+            current.style.opacity = "0";
+            current.style.pointerEvents = "none";
+
+            prev.style.opacity = "1";
+            prev.style.transform = "scale(1) translateZ(0)";
+            prev.style.pointerEvents = "auto";
+        }
+    </script>
+</body>
+</html>
